@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { AppProvider } from './contexts/AppContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Onboarding from './components/Onboarding';
 import BottomNav from './components/BottomNav';
 import Home from './components/Home';
+import Login from './components/Login';
+import ProtectedRoute from './components/ProtectedRoute';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(true);
 
   useEffect(() => {
-    // Show splash for 2 seconds then transition to onboarding
+    // Muestra splash por 2 segundos
     const timer = setTimeout(() => {
       setShowSplash(false);
     }, 2000);
@@ -30,16 +34,30 @@ function App() {
 
   return (
     <AppProvider>
-      <div className="min-h-screen bg-gray-50">
-        {showOnboarding ? (
-          <Onboarding onComplete={() => setShowOnboarding(false)} />
-        ) : (
-          <>
-            <Home />
-            <BottomNav />
-          </>
-        )}
-      </div>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            {/* Ruta para la pantalla de login */}
+            <Route path="/login" element={<Login />} />
+            {/* Ruta principal: muestra Onboarding si está activo, de lo contrario aplica la lógica protegida */}
+            <Route
+              path="/"
+              element={
+                showOnboarding ? (
+                  <Onboarding onComplete={() => setShowOnboarding(false)} />
+                ) : (
+                  <ProtectedRoute>
+                    <>
+                      <Home />
+                      <BottomNav />
+                    </>
+                  </ProtectedRoute>
+                )
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </AppProvider>
   );
 }

@@ -1,6 +1,8 @@
+// Home.tsx
 import React from 'react';
 import { Search, ChevronRight } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
+import LogoutButton from './LogoutButton';
 
 const Home: React.FC = () => {
   const { user } = useApp();
@@ -8,12 +10,17 @@ const Home: React.FC = () => {
   return (
     <div className="pb-20 pt-safe-top">
       {/* Header */}
-      <header className="px-4 py-6">
-        <h1 className="text-xl font-medium">
-          Hola {user?.name?.split(' ')[0]},
-          <br />
-          <span className="text-gray-500">¿qué prepararemos hoy?</span>
-        </h1>
+      <header className="px-4 py-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-medium">
+            Hola {user?.name?.split(' ')[0]},
+            <br />
+            <span className="text-gray-500">¿qué prepararemos hoy?</span>
+          </h1>
+        </div>
+        <div>
+          <LogoutButton />
+        </div>
       </header>
 
       {/* Search Bar */}
@@ -45,7 +52,9 @@ const Home: React.FC = () => {
 
       {/* Ingredient Categories */}
       <section className="px-4">
-        <h2 className="text-lg font-medium mb-4">Escoge tus ingredientes favoritos</h2>
+        <h2 className="text-lg font-medium mb-4">
+          Escoge tus ingredientes favoritos
+        </h2>
         <div className="grid grid-cols-3 gap-4">
           <CategoryCard title="Frutas" emoji="🍓" bgColor="bg-red-100" />
           <CategoryCard title="Verduras" emoji="🥦" bgColor="bg-green-100" />
